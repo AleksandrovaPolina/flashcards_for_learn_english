@@ -1,0 +1,49 @@
+.container_word{
+    display: flex;
+    flex-direction: column;
+    width: 250px;
+    height: 300px;
+    border: 1px solid grey;
+    margin: 15px;
+    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(231, 228, 228);
+    
+    .meaning{
+    font-size: 25px;
+    color: black;
+    font-weight: bold;
+    }
+
+    .transcription{
+    font-size: 20px;
+    color: grey;
+    }
+
+    .translation{
+    font-size: 22px;
+    margin-top: 35px;
+    color: rgb(5, 141, 5);
+    }
+
+    .btn{
+    display: flex;
+    justify-content: space-evenly;
+    }
+
+    .btnCheck{
+    border-radius: 10px;
+    border: 1px solid black;
+    background-color: rgb(157, 157, 228);
+    margin-top: 35px;
+    color: white;
+    padding: 6px;
+    }
+
+    .btnCheck:focus{
+        background-color: rgb(5, 141, 5);
+        border: none;
+    }
+}
+
