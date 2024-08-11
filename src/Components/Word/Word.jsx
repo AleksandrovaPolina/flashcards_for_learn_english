@@ -1,7 +1,8 @@
 import styles from './Word.module.scss'
 import {useState, useEffect, useRef} from 'react'
 
-export default function Word({meaning, transcription, translation, id, increaseCount}){
+
+export default function Word({english, transcription, russian, id, increaseCount}){
 
     const [translate, setTranslate] = useState(false);
 
@@ -22,10 +23,10 @@ export default function Word({meaning, transcription, translation, id, increaseC
 
     return(
         <div className={styles.container_word}>
-            <p className={styles.meaning}>{meaning}</p>
+            <p className={styles.meaning}>{english}</p>
             <p className={styles.transcription}>{transcription}</p>
             {translate ?
-            (<p className={styles.translation} ref={focusElem}>{translation}</p>) 
+            (<p className={styles.translation} ref={focusElem}>{russian}</p>) 
             : 
             (<button className={styles.btnCheck} onClick={showTranslate} ref={focusElem}>Проверить</button>)}
         </div>
