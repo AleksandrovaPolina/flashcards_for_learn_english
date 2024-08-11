@@ -1,12 +1,16 @@
 import styles from './Game.module.scss'
 import Word from '../../Components/Word/Word'
 import {useState} from 'react'
+import { useContext } from 'react'
+import { dataContext }  from '../../Context/Context'
 
-export default function Game({words, setWords}){
+export default function Game(){
 
     const [index, setIndex] = useState(0);
 
     const [count,setCount] = useState(0);
+
+    const {words} = useContext(dataContext);
 
     function increaseCount(){
         setCount(count + 1)

@@ -1,0 +1,18 @@
+input:required[value=""]{
+    border: 1px solid red;
+}
+
+.container_input{
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+
+    .warning{
+        color: red;
+    }
+
+    .input{
+        height: 37px;
+    }
+}
+
