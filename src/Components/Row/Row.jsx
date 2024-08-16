@@ -1,22 +1,27 @@
 import { useState, useEffect } from 'react';
 import styles from './Row.module.scss'
-import {isValidEmptyRow} from './validForm'
+import Input from '../Input/Input'
+import { useContext } from 'react'
+import { MyContext }  from '../../Context/Context'
+import { isValidEmptyInput } from '../Input/validInput'
 
-export default function Row({meaning, transcription, translation, removeItem, id, saveEditWords}){
+export default function Row({id, english, transcription, russian}){
 
     const [edit, setEdit] = useState(false);
     
     const [state, setState] = useState({
-        meaningState: '',
+        englishState: '',
         transcriptionState: '',
-        translationState: ''
+        russianState: ''
     })
 
+    const {removeItem, saveEditWords} = useContext(MyContext);
+
     useEffect(()=>{
-        setState({meaningState: meaning,
+        setState({englishState: english,
                 transcriptionState: transcription,
-                translationState: translation});
-    }, [meaning, transcription, translation])
+                russianState: russian});
+    }, [english, transcription, russian])
 
     const editWord = (e) =>{
         setEdit(true);
@@ -24,29 +29,30 @@ export default function Row({meaning, transcription, translation, removeItem, id
     }
 
     function cancelEdit(){
-        setEdit(false)
+        setEdit(false);
+        setState({englishState: english,
+                transcriptionState: transcription,
+                russianState: russian})
     }
-
 
     return(
         <div className={styles.container_row}>
             {edit? 
             (<div className={styles.row}>
-                {isValidEmptyRow(state.meaningState, state.transcriptionState, state.translationState) && <p className={styles.warning}>Заполните все поля</p>}
-                <input type="text" name='meaningState' value={state.meaningState} onChange={editWord} required/>
-                <input type="text" name='transcriptionState' value={state.transcriptionState} onChange={editWord} required/>
-                <input type="text" name='translationState' value={state.translationState} onChange={editWord} required/>
+                <Input name='englishState' value={state.englishState} onChange={editWord}/>
+                <Input name='transcriptionState' value={state.transcriptionState} onChange={editWord}/>
+                <Input name='russianState' value={state.russianState} onChange={editWord}/>
                 <div className={styles.container_btn}>
-                <button className={styles.btn} onClick={()=>{isValidEmptyRow(state.meaningState, state.transcriptionState, state.translationState)? editWord : saveEditWords(id, state.meaningState, state.transcriptionState, state.translationState);
+                <button className={styles.btn} onClick={()=>{saveEditWords(id, state.englishState, state.transcriptionState, state.russianState);setEdit(false);
                 }}>Сохранить</button>
                 <button className={styles.btn} onClick={cancelEdit}>Отмена</button>
                 </div>
             </div>)
             :
             (<div className={styles.row}>
-                <p className={styles.word}>{meaning}</p>
+                <p className={styles.word}>{english}</p>
                 <p className={styles.word}>{transcription}</p>
-                <p className={styles.word}>{translation}</p>
+                <p className={styles.word}>{russian}</p>
                 <div className={styles.container_btn}>
                 <button className={styles.btn} onClick={editWord}>Редактировать</button>
                 <button className={styles.btn} onClick={()=>removeItem(id)}>Удалить</button>
