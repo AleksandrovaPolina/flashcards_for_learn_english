@@ -2,7 +2,7 @@ import styles from './Game.module.scss'
 import Word from '../../Components/Word/Word'
 import {useState} from 'react'
 import { useContext } from 'react'
-import { dataContext }  from '../../Context/Context'
+import { MyContext }  from '../../Context/Context'
 
 export default function Game(){
 
@@ -10,7 +10,7 @@ export default function Game(){
 
     const [count,setCount] = useState(0);
 
-    const {words} = useContext(dataContext);
+    const {words, isLoading} = useContext(MyContext);
 
     function increaseCount(){
         setCount(count + 1)
@@ -32,6 +32,9 @@ export default function Game(){
 
     return(
         <div className={styles.container_game}>
+            {isLoading === true && <div className={styles.cssload_container}>
+                                    <div className={styles.cssload_whirlpool}></div>
+                                    </div>}
             <div className={styles.wrapper}>
                 <button className={styles.btn} onClick={scrollBack}>&larr;</button>
                 <Word {...words[index]} increaseCount={increaseCount}/>

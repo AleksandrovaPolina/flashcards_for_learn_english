@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
 import styles from './Row.module.scss'
 import Input from '../Input/Input'
+import { useContext } from 'react'
+import { MyContext }  from '../../Context/Context'
+import { isValidEmptyInput } from '../Input/validInput'
 
-export default function Row({id, english, transcription, russian, removeItem, saveEditWords}){
+export default function Row({id, english, transcription, russian}){
 
     const [edit, setEdit] = useState(false);
     
@@ -11,6 +14,8 @@ export default function Row({id, english, transcription, russian, removeItem, sa
         transcriptionState: '',
         russianState: ''
     })
+
+    const {removeItem, saveEditWords} = useContext(MyContext);
 
     useEffect(()=>{
         setState({englishState: english,
@@ -38,7 +43,7 @@ export default function Row({id, english, transcription, russian, removeItem, sa
                 <Input name='transcriptionState' value={state.transcriptionState} onChange={editWord}/>
                 <Input name='russianState' value={state.russianState} onChange={editWord}/>
                 <div className={styles.container_btn}>
-                <button className={styles.btn} onClick={()=>{saveEditWords(id, state.englishState, state.transcriptionState, state.russianState);
+                <button className={styles.btn} onClick={()=>{saveEditWords(id, state.englishState, state.transcriptionState, state.russianState);setEdit(false);
                 }}>Сохранить</button>
                 <button className={styles.btn} onClick={cancelEdit}>Отмена</button>
                 </div>
