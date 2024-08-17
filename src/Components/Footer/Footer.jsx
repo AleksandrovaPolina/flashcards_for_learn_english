@@ -1,7 +1,5 @@
-import styles from './Footer.module.scss'
+import styles from "./Footer.module.scss";
 
-export default function Footer(){
-    return(
-        <div className={styles.container_footer}>Footer</div>
-    )
+export default function Footer() {
+  return <div className={styles.container_footer}></div>;
 }
