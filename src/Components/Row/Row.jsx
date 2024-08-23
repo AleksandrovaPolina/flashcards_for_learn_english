@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import styles from "./Row.module.scss";
 import Input from "../Input/Input";
-import { useContext } from "react";
-import { MyContext } from "../../Context/Context";
+import { useDispatch } from "react-redux";
+import { deleteWord } from "../../store/slice/words";
 
 export default function Row({ id, english, transcription, russian }) {
   const [edit, setEdit] = useState(false);
+
+  const dispatch = useDispatch();
 
   const [state, setState] = useState({
     englishState: "",
@@ -13,7 +15,6 @@ export default function Row({ id, english, transcription, russian }) {
     russianState: "",
   });
 
-  const { removeItem, saveEditWords } = useContext(MyContext);
 
   useEffect(() => {
     setState({ englishState: english, transcriptionState: transcription, russianState: russian });
@@ -66,7 +67,7 @@ export default function Row({ id, english, transcription, russian }) {
             <button className={styles.btn} onClick={editWord}>
               Редактировать
             </button>
-            <button className={styles.btn} onClick={() => removeItem(id)}>
+            <button className={styles.btn} onClick={() => dispatch(deleteWord(id))}>
               Удалить
             </button>
           </div>

@@ -1,11 +1,11 @@
 import { useState } from "react";
 import styles from "./AddWord.module.scss";
-import { useContext } from "react";
-import { MyContext } from "../../Context/Context";
 import { isValidForm } from "./validForm";
+import { addWordFetch } from "../../store/slice/words";
+import { useDispatch } from "react-redux";
 
 export default function AddWord() {
-  const { addWord } = useContext(MyContext);
+  const dispatch = useDispatch();
 
   const [stateAddWord, setStateAddWord] = useState({
     englishState: "",
@@ -24,7 +24,8 @@ export default function AddWord() {
       setValidInputs(true);
     } else {
       setValidInputs(false);
-      addWord(stateAddWord.englishState, stateAddWord.transcriptionState, stateAddWord.russianState);
+      dispatch(addWordFetch(stateAddWord.englishState, stateAddWord.transcriptionState, 
+        stateAddWord.russianState));
       setStateAddWord({
         englishState: "",
         transcriptionState: "",
