@@ -5,7 +5,7 @@ export const getWords = createAsyncThunk(
     'words/getWords',
     async function(_, {rejectWithValue}){
         try{
-            const response = await fetch('http://itgirlschool.justmakeit.ru/api/words');
+            const response = await fetch('/api/words');
         if (!response.ok) {
             throw new Error("Something went wrong");
           }
