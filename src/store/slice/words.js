@@ -20,16 +20,16 @@ export const getWords = createAsyncThunk(
 
 export const addWordFetch = createAsyncThunk(
     'words/addWordFetch',
-    async function (englishState, transcriptionState, russianState, {rejectWithValue}){
+    async function (stateAddWord, {rejectWithValue}){
         try{
             const word = {
-                english: englishState,
-                transcription: transcriptionState,
-                russian: russianState,
+                english: stateAddWord.englishState,
+                transcription: stateAddWord.transcriptionState,
+                russian: stateAddWord.russianState,
                 tags: "",
                 tags_json: "",
             }
-            const response = await fetch('/api/words/add', {
+            const response = await fetch(`/api/words/add`, {
                 method: "POST",
                 headers: {
                   "Content-type": "application/json;charset=UTF-8",
@@ -39,7 +39,7 @@ export const addWordFetch = createAsyncThunk(
               if (!response.ok) {
                 throw new Error("Something went wrong")}
                 const data = await response.json();
-                console.log(data)
+                return data;
         }
         catch(error){
             return rejectWithValue(error.message)
@@ -55,8 +55,37 @@ export const deleteWord = createAsyncThunk(
             if(!response.ok){
                 throw new Error("Something went wrong");
             }
-            console.log(response)
-            
+            return id;
+        }
+        catch(error){
+            return rejectWithValue(error.message)
+        }
+    }
+)
+
+export const saveEditWord = createAsyncThunk(
+    'words/saveEditWord',
+    async function (obj, {rejectWithValue}){
+        try{
+            const {id, english, transcription, russian} = obj;
+            const editWord = {
+                english: english,
+                transcription: transcription,
+                russian: russian,
+                tags: "",
+                tags_json: "",
+            }
+            const response = await fetch(`/api/words/${id}/update`, {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json;charset=UTF-8",
+                },
+                body: JSON.stringify(editWord),
+                })
+                if(!response.ok){
+                    throw new Error("Something went wrong");
+                }
+                return obj;
         }
         catch(error){
             return rejectWithValue(error.message)
@@ -76,25 +105,51 @@ const wordsSlice = createSlice({
     status: null,
     error: null,
   },
-  reducers: {
-    addWord(state, action) {
-            state.words.push(action.payload)
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getWords.pending, (state)=>{
-        state.status = 'loading';
-        state.error = null;
-    })
-    builder.addCase(getWords.fulfilled, (state, action)=>{
-        state.status = 'resolved';
-        state.words = action.payload;
-    })
-    builder.addCase(getWords.rejected, (state, action)=>setError(state, action));
-    builder.addCase(addWordFetch.rejected, (state, action)=>setError(state, action));
-    builder.addCase(deleteWord.rejected, (state, action)=>setError(state, action))
+    builder
+        .addCase(getWords.pending, (state)=>{
+            state.status = 'loading';
+            state.error = null;
+        })
+        .addCase(getWords.fulfilled, (state, action)=>{
+            state.words = action.payload;
+            state.status = 'resolved';
+        })
+        .addCase(getWords.rejected, (state, action)=>setError(state, action))
+
+        .addCase(addWordFetch.pending, (state)=>{
+            state.status = 'loading';
+            state.error = null;
+        })
+        .addCase(addWordFetch.fulfilled, (state, action)=>{
+            state.words = [...state.words, action.payload];
+            state.status = 'resolved';
+        })
+        .addCase(addWordFetch.rejected, (state, action)=>setError(state, action))
+
+        .addCase(saveEditWord.pending, (state)=>{
+            state.status = 'loading';
+            state.error = null;
+        })
+        .addCase(saveEditWord.fulfilled, (state, action)=>{
+            const updatedObj = state.words.findIndex((item)=>item.id === action.payload.id);
+            state.words[updatedObj] = action.payload;
+            state.status = 'resolved';
+        })
+        .addCase(saveEditWord.rejected, (state, action)=>setError(state, action))
+        
+        .addCase(deleteWord.pending, (state)=>{
+            state.status = 'loading';
+            state.error = null;
+        })
+        .addCase(deleteWord.fulfilled, (state,action)=>{
+            state.words = state.words.filter((item) => item.id !== action.payload)
+            state.status = 'resolved';
+        })
+        .addCase(deleteWord.rejected, (state, action)=>setError(state, action))
   }
 });
 
-const { addWord } = wordsSlice.actions;
+
 export default wordsSlice.reducer;

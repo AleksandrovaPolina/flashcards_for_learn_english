@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import styles from "./Row.module.scss";
 import Input from "../Input/Input";
 import { useDispatch } from "react-redux";
-import { deleteWord } from "../../store/slice/words";
+import { deleteWord, saveEditWord } from "../../store/slice/words";
 
 export default function Row({ id, english, transcription, russian }) {
   const [edit, setEdit] = useState(false);
@@ -17,7 +17,9 @@ export default function Row({ id, english, transcription, russian }) {
 
 
   useEffect(() => {
-    setState({ englishState: english, transcriptionState: transcription, russianState: russian });
+    setState({ englishState: english,
+              transcriptionState: transcription, 
+              russianState: russian });
   }, [english, transcription, russian]);
 
   const editWord = () => {
@@ -37,7 +39,13 @@ export default function Row({ id, english, transcription, russian }) {
     if (state.englishState === "" || state.transcriptionState === "" || state.russianState === "") {
       editWord;
     } else {
-      saveEditWords(id, state.englishState, state.transcriptionState, state.russianState);
+      const obj = {
+        id:id,
+        english:state.englishState,
+        transcription:state.transcriptionState,
+        russian:state.russianState,
+      }
+      dispatch(saveEditWord(obj));
       setEdit(false);
     }
   };

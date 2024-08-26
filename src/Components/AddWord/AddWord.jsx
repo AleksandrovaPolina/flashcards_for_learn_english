@@ -24,8 +24,7 @@ export default function AddWord() {
       setValidInputs(true);
     } else {
       setValidInputs(false);
-      dispatch(addWordFetch(stateAddWord.englishState, stateAddWord.transcriptionState, 
-        stateAddWord.russianState));
+      dispatch(addWordFetch(stateAddWord));
       setStateAddWord({
         englishState: "",
         transcriptionState: "",
